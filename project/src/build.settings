@@ -1,0 +1,32 @@
+settings =
+{
+	orientation =
+	{
+		default = "landscapeRight",
+		supported =
+		{
+			"landscapeRight",
+			"landscapeLeft",
+		},
+	},
+	iphone =
+	{
+		plist =
+		{
+			CoronaUseIOS6LandscapeOnlyWorkaround = true,
+		},
+	},
+	content =
+    {
+        width = 320,
+        height = 480,
+        scale = "letterbox",
+
+        imageSuffix =
+        {
+            ["_medium"] = 1,
+            ["-x15"] = 1.5,
+            ["_large"] = 2,
+        },
+    },
+}
