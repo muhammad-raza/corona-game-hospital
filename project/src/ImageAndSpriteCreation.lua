@@ -36,11 +36,13 @@ function createWalls()
 
   local wallBottomSensor   = display.newRect( 0, _H-(percent/2)-(hospitalBed.contentHeight*3)/4, _W, 1*pixelRatio )
   local wallAmbulance      = display.newRect( 0, _H-(percent/2)-ambulance.contentHeight, pointLeft/2, 1*pixelRatio )
+  local collisionFilter = { categoryBits = 1, maskBits = 2 };
 
-  physics.addBody( wallBottom, "static", {density=1, friction=1, bounce=0} )
-  physics.addBody( wallBottomSensor, "static", {density=1, friction=1, isSensor = true} )
-  physics.addBody( wallAmbulance, "static", {density=1, friction=1, isSensor = true} )
+  physics.addBody( wallBottom, "static", {density=1, friction=1, bounce=0, filter=collisionFilter} )
+  physics.addBody( wallBottomSensor, "static", {density=1, friction=1, isSensor = true, filter=collisionFilter} )
+  physics.addBody( wallAmbulance, "static", {density=1, friction=1, isSensor = true, filter=collisionFilter} )
 
+  physics.addBody( hospitalBed, "static", { density=1, friction=1, bounce=0, isSleepingAllowed = false, filter=collisionFilter} )
 
   wallBottom:setFillColor(0,0,0,0);
   wallBottomSensor:setFillColor(0,0,0,0);
@@ -52,10 +54,4 @@ function createWalls()
 
   return wallGroup;
 
-end
-
-function removeObject(obj)
-  obj:removeSelf();
-  Runtime:removeEventListener("enterFrame", obj);
-  obj = nil;
 end

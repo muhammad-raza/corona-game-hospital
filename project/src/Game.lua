@@ -44,8 +44,6 @@ function scene:createScene( event )
 
     walls = image.createWalls();
 
-    physics.addBody( hospitalBed, "static", { density=1, friction=1, bounce=0, isSleepingAllowed = false} )
-
     group:insert(background);
     group:insert(buildingObj);
     group:insert(buildingFire);
@@ -68,7 +66,7 @@ function scene:enterScene( event )
 
     local function generateRagdoll()
       local color1 = {math.random(155), math.random(155), math.random(155), 255 }
-      local ragdollObj = ragdoll.newRagDoll(pointRight, 50, color1)
+      local ragdollObj = ragdoll.newRagDoll(25, 50, color1)
       ragdollObj[1].enterFrame = collision.jumpRagdoll
       Runtime:addEventListener("enterFrame", ragdollObj[1]);
       ragdollObj[1].action = "drop"
@@ -87,7 +85,7 @@ function scene:enterScene( event )
     wallBottomSensor:addEventListener( "collision", wallBottomSensor )
 
     local wallAmbulance = walls[3];
-    wallAmbulance.collision = collision.onWallCollision;
+    wallAmbulance.collision = collision.onAmbulanceWallCollision;
     wallAmbulance:addEventListener( "collision", wallAmbulance )
 
 end

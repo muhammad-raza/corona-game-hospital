@@ -45,22 +45,17 @@ function onWallBottomSensorCollision(self, event)
   ragdollLocal[1].action = "immobalize";
 end
 
-function onAmbulanceCollision(self, event)
-    action = "awardAndDestroy";
+local function removeObject(obj)
+  obj:removeSelf();
+  Runtime:removeEventListener("enterFrame", obj);
+  obj = nil;
 end
 
---local function getVertex(jumpPos)
---  local vertex = {};
---  if (jumpPos == jumpOne) then
---    vertex.x = pointOne;
---  elseif (jumpPos == jumpTwo) then
---    vertex.x = pointTwo;
---  elseif (jumpPos == jumpThree) then
---    vertex.x = pointThree;
---  end
---  vertex.y = 65*pixelRatio;
---  return vertex;
---end
+function onAmbulanceWallCollision(self, event)
+  local ragdollLocal = event.other.parent;
+  ragdollLocal[1].action = "awardAndDestroy";
+--  removeObject(ragdollLocal);
+end
 
 local function getParabolicCoordinates(event, jumpPos)
   local coords = {};
@@ -87,6 +82,13 @@ local function dropRagdoll(event)
   event.headJoint:removeSelf()
 end
 
+local function revertScale ()
+  transition.to( ambulance, { time=300, xScale=1, yScale=1} )
+end
+
+local function awardAndDestroyRagdoll()
+  transition.to( ambulance, { time=300, xScale=2, yScale=2, onComplete=revertScale} )
+end
 
 function jumpRagdoll(event)
 --  print(event.action)
@@ -97,5 +99,9 @@ function jumpRagdoll(event)
 
   if (event.action == jumpOne or event.action == jumpTwo or event.action == jumpThree) then
       jump(event, event.action);
+  end
+
+  if (event.action == "awardAndDestroy") then
+    awardAndDestroyRagdoll();
   end
 end

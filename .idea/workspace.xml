@@ -75,25 +75,25 @@
       <file leaf-file-name="Game.lua" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/project/src/Game.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="18" selection-start="561" selection-end="561" vertical-scroll-proportion="0.0">
+            <state line="38" column="6" selection-start="1662" selection-end="1662" vertical-scroll-proportion="-9.115385">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="collision.lua" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="collision.lua" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/project/src/collision.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="5" selection-start="1227" selection-end="1227" vertical-scroll-proportion="0.0">
+            <state line="78" column="43" selection-start="2266" selection-end="2266" vertical-scroll-proportion="0.44954127">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ragdoll.lua" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ragdoll.lua" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/project/src/ragdoll.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="35" selection-start="1078" selection-end="1078" vertical-scroll-proportion="0.017084282">
+            <state line="129" column="59" selection-start="3682" selection-end="3717" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -102,7 +102,7 @@
       <file leaf-file-name="main.lua" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/project/src/main.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="34" selection-start="266" selection-end="266" vertical-scroll-proportion="0.0">
+            <state line="5" column="28" selection-start="167" selection-end="167" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -111,7 +111,7 @@
       <file leaf-file-name="Bed.lua" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/project/src/Bed.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="14" selection-start="270" selection-end="270" vertical-scroll-proportion="0.0">
+            <state line="19" column="34" selection-start="401" selection-end="401" vertical-scroll-proportion="-4.1923075">
               <folding />
             </state>
           </provider>
@@ -120,7 +120,7 @@
       <file leaf-file-name="Building.lua" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/project/src/Building.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="21" selection-start="872" selection-end="884" vertical-scroll-proportion="0.0">
+            <state line="11" column="55" selection-start="512" selection-end="512" vertical-scroll-proportion="-6.3461537">
               <folding />
             </state>
           </provider>
@@ -129,7 +129,7 @@
       <file leaf-file-name="ImageAndSpriteCreation.lua" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/project/src/ImageAndSpriteCreation.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="25" selection-start="1777" selection-end="1777" vertical-scroll-proportion="0.0">
+            <state line="57" column="0" selection-start="2077" selection-end="2077" vertical-scroll-proportion="-17.5">
               <folding />
             </state>
           </provider>
@@ -152,15 +152,15 @@
         <option value="$PROJECT_DIR$/project/src/game.lua" />
         <option value="$PROJECT_DIR$/project/src/Building.lua" />
         <option value="$PROJECT_DIR$/project/src/gameUI.lua" />
-        <option value="$PROJECT_DIR$/project/src/ragdoll.lua" />
-        <option value="$PROJECT_DIR$/project/src/ImageAndSpriteCreation.lua" />
         <option value="$PROJECT_DIR$/project/src/paths.lua" />
         <option value="$PROJECT_DIR$/project/src/LoadSave.lua" />
         <option value="$PROJECT_DIR$/project/src/Paths.lua" />
         <option value="$PROJECT_DIR$/project/src/Bed.lua" />
+        <option value="$PROJECT_DIR$/project/src/ragdoll.lua" />
+        <option value="$PROJECT_DIR$/project/src/main.lua" />
+        <option value="$PROJECT_DIR$/project/src/ImageAndSpriteCreation.lua" />
         <option value="$PROJECT_DIR$/project/src/Game.lua" />
         <option value="$PROJECT_DIR$/project/src/collision.lua" />
-        <option value="$PROJECT_DIR$/project/src/main.lua" />
       </list>
     </option>
   </component>
@@ -197,6 +197,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="Favorites" />
       <pane id="ProjectPane">
         <subPane>
@@ -250,15 +251,14 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="MemberChooser.sorted" value="false" />
     <property name="recentsLimit" value="5" />
+    <property name="MemberChooser.sorted" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
@@ -428,7 +428,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="212" y="22" width="1468" height="999" extended-state="0" />
+    <frame x="0" y="22" width="1680" height="1024" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -440,17 +440,17 @@
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Kahlua" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24031007" sideWeight="0.6427784" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3572216" sideWeight="0.9758007" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20907418" sideWeight="0.64377683" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35622317" sideWeight="0.9758007" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -532,39 +532,51 @@
         <state line="18" column="17" selection-start="592" selection-end="592" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/project/src/Game.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="18" selection-start="561" selection-end="561" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project/src/collision.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="5" selection-start="1227" selection-end="1227" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/project/src/main.lua">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="34" selection-start="266" selection-end="266" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project/src/Bed.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="14" selection-start="270" selection-end="270" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project/src/Building.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="21" selection-start="872" selection-end="884" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/project/src/ImageAndSpriteCreation.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="25" selection-start="1777" selection-end="1777" vertical-scroll-proportion="0.0" />
+        <state line="5" column="28" selection-start="167" selection-end="167" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/project/src/ragdoll.lua">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="35" selection-start="1078" selection-end="1078" vertical-scroll-proportion="0.017084282">
+        <state line="129" column="59" selection-start="3682" selection-end="3717" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/src/Bed.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="34" selection-start="401" selection-end="401" vertical-scroll-proportion="-4.1923075">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/src/Building.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="55" selection-start="512" selection-end="512" vertical-scroll-proportion="-6.3461537">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/src/ImageAndSpriteCreation.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="0" selection-start="2077" selection-end="2077" vertical-scroll-proportion="-17.5">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/src/Game.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="6" selection-start="1662" selection-end="1662" vertical-scroll-proportion="-9.115385">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/project/src/collision.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="78" column="43" selection-start="2266" selection-end="2266" vertical-scroll-proportion="0.44954127">
           <folding />
         </state>
       </provider>

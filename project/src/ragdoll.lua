@@ -127,19 +127,20 @@ ragdoll.newRagDoll = function(originX, originY, colorTable)
     local d=1
 local e=0
 local f=1
+local collisionFilter = { categoryBits = 2, maskBits = 1 };
 
-	physics.addBody (head, "dynamic",{bounce = 0, density=1.0, friction=0.4, radius = 4*pixelRatio})
-	physics.addBody (torsoA, "dynamic",{bounce = e, density=d, friction = f})
-	physics.addBody (torsoB, "dynamic",{bounce = e, density=d, friction = f})
-	physics.addBody (torsoC, "dynamic",{bounce = e, density=d, friction = f})
-	physics.addBody (upperArmL, "dynamic",{bounce = e, density=d, friction = f})
-	physics.addBody (upperArmR, "dynamic",{bounce = e, density=d, friction = f})
-	physics.addBody (lowerArmL, "dynamic",{bounce = e, density=d, friction = f})
-	physics.addBody (lowerArmR, "dynamic",{bounce = e, density=d, friction = f})
-	physics.addBody (upperLegL, "dynamic",{bounce = e, density=d, friction = f})
-	physics.addBody (upperLegR, "dynamic",{bounce = e, density=d, friction = f})
-	physics.addBody (lowerLegL, "dynamic",{bounce = e, density=d, friction = f})
-	physics.addBody (lowerLegR, "dynamic",{bounce = e, density=d, friction = f})
+	physics.addBody (head, "dynamic",{bounce = 0, density=1.0, friction=0.4, radius = 4*pixelRatio, filter = collisionFilter})
+	physics.addBody (torsoA, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
+	physics.addBody (torsoB, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
+	physics.addBody (torsoC, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
+	physics.addBody (upperArmL, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
+	physics.addBody (upperArmR, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
+	physics.addBody (lowerArmL, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
+	physics.addBody (lowerArmR, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
+	physics.addBody (upperLegL, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
+	physics.addBody (upperLegR, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
+	physics.addBody (lowerLegL, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
+	physics.addBody (lowerLegR, "dynamic",{bounce = e, density=d, friction = f, filter = collisionFilter})
 --]]
 	local function addFrictionJoint(a, b, posX, posY, lowerAngle, upperAngle, mT) 
 		local j = physics.newJoint ( "pivot", a, b, posX, posY, rFrom, rTo)
