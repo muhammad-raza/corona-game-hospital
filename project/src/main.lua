@@ -7,4 +7,4 @@ physics.start (true)
 physics.setGravity(0, 0)
 
 local storyboard = require "storyboard";
-storyboard.gotoScene("game");
+storyboard.gotoScene("menu");

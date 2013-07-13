@@ -30,6 +30,12 @@ function scene:createScene( event )
 
     local background = image.setImage("background.png", _W, _H, 0, 0, display.TopLeftReferencePoint)
 
+    local totalScore = 0;
+    local score = display.newText("Highest Score: "..totalScore, 0, 0, native.systemFont, 16);
+    score:setReferencePoint(display.TopCenterReferencePoint);
+    score.x = _W/2;
+    score:setTextColor(100,100,100,200)
+
     buildingObj   = image.setImage("building_new.png", 70*pixelRatio, 220*pixelRatio, _W, _H-percent, display.BottomRightReferencePoint)
     local buildingFire = image.addSprite("fire_new.png", 200, 200, buildingObj.x-buildingObj.contentWidth/2, buildingObj.y-(buildingObj.contentHeight*35/100), display.CenterReferencePoint, 12, 1500, 0)
     buildingFire.xScale = 0.5*pixelRatio
@@ -57,8 +63,6 @@ end
 function scene:enterScene( event )
     local group = self.view
 
---    Runtime:addEventListener("touch", traceClicks)
-
     Runtime:addEventListener("touch", bed.controlBedWithTouch);
     hospitalBed.enterFrame = bed.moveHospitalBed;
     Runtime:addEventListener("enterFrame", hospitalBed);
@@ -71,6 +75,7 @@ function scene:enterScene( event )
       Runtime:addEventListener("enterFrame", ragdollObj[1]);
       ragdollObj[1].action = "drop"
       ragdollObj[1].count = 1;
+      group:insert(ragdollObj);
     end
 
     timer.performWithDelay( 1000, generateRagdoll , 1 )
@@ -88,6 +93,8 @@ function scene:enterScene( event )
     wallAmbulance.collision = collision.onAmbulanceWallCollision;
     wallAmbulance:addEventListener( "collision", wallAmbulance )
 
+    group:insert(wallBottomSensor);
+    group:insert(wallAmbulance);
 end
 
 
