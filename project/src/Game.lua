@@ -6,7 +6,8 @@ local collision = require ("collision")
 
 local building = require ("Building")
 local image = require("ImageAndSpriteCreation")
-local loadsave = require("LoadSave")
+local menu = require("Menu")
+local monetize = require("Monetization")
 
 local scene = storyboard.newScene()
 
@@ -30,11 +31,14 @@ function scene:createScene( event )
 
     local background = image.setImage("background.png", _W, _H, 0, 0, display.TopLeftReferencePoint)
 
-    local totalScore = 0;
-    local score = display.newText("Highest Score: "..totalScore, 0, 0, native.systemFont, 16);
-    score:setReferencePoint(display.TopCenterReferencePoint);
-    score.x = _W/2;
-    score:setTextColor(100,100,100,200)
+    scoreText = display.newText("You Saved: 0", 0, 0,152*pixelRatio, 28*pixelRatio, native.systemFont, 16);
+    scoreText:setReferencePoint(display.TopLeftReferencePoint);
+    scoreText:setTextColor(100,100,100,200)
+
+    highScoreText = display.newText("High Score: "..settings.highScore, 0, 0, 152*pixelRatio,28*pixelRatio, native.systemFont, 16);
+    highScoreText:setReferencePoint(display.TopLeftReferencePoint);
+    highScoreText.y = scoreText.contentHeight;
+    highScoreText:setTextColor(100,100,100,200)
 
     buildingObj   = image.setImage("building_new.png", 70*pixelRatio, 220*pixelRatio, _W, _H-percent, display.BottomRightReferencePoint)
     local buildingFire = image.addSprite("fire_new.png", 200, 200, buildingObj.x-buildingObj.contentWidth/2, buildingObj.y-(buildingObj.contentHeight*35/100), display.CenterReferencePoint, 12, 1500, 0)
@@ -50,11 +54,16 @@ function scene:createScene( event )
 
     walls = image.createWalls();
 
+
+    monetize.createFullScreenAd();
+
     group:insert(background);
     group:insert(buildingObj);
     group:insert(buildingFire);
     group:insert(ambulance);
     group:insert(hospitalBed);
+    group:insert(scoreText);
+    group:insert(highScoreText);
     group:insert(walls);
 
 end
@@ -69,7 +78,7 @@ function scene:enterScene( event )
     delay = 3000;
 
     local function generateRagdoll()
-      local color1 = {math.random(155), math.random(155), math.random(155), 255 }
+      local color1 = {math.random(120), math.random(120), math.random(120), 255 }
       local ragdollObj = ragdoll.newRagDoll(25, 50, color1)
       ragdollObj[1].enterFrame = collision.jumpRagdoll
       Runtime:addEventListener("enterFrame", ragdollObj[1]);

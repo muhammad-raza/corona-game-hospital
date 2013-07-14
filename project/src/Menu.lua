@@ -1,21 +1,28 @@
-
+module (..., package.seeall)
 --requirements
 local storyboard = require( "storyboard" )
 local image = require("ImageAndSpriteCreation")
 local widget = require("widget")
+local loadSave = require("LoadSave")
+local monetize = require("Monetization")
+
 
 local scene = storyboard.newScene()
 
-
 local display = display; local _W = display.contentWidth; local _H = display.contentHeight; local pixelRatio = _W/480;
-local percent = (_H/100)*9; local soundOn = true;
+local percent = (_H/100)*9;
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
     local group = self.view
-
     local background = image.setImage("background.png", _W, _H, 0, 0, display.TopLeftReferencePoint);
     background:setFillColor(110, 110, 110, 100)
+
+    monetize.createAdLink();
+    monetize.createFullScreenAd();
+    monetize.startFullPageAdvert();
+    monetize.showBannerAtTop();
+
     group:insert(background);
 
 end
@@ -30,35 +37,61 @@ local function removeObject(obj)
 end
 
 local function soundCheck(event)
-  print (soundOn)
   if (event == true) then
-    soundOn = not soundOn;
+    settings.soundOn = not settings.soundOn;
   end
-  if (soundOn == true) then
-    soundOn = false;
+  if (settings.soundOn == true) then
+    settings.soundOn = false;
     sound.isVisible = false;
     mute.isVisible = true;
-  elseif (soundOn == false) then
-    soundOn = true;
+  elseif (settings.soundOn == false) then
+    settings.soundOn = true;
     sound.isVisible = true;
     mute.isVisible = false;
   end
+
+  loadSave.saveTable(settings, "settings.txt");
 end
 
+local function goToAdvertLink()
+  monetize.openAdLink();
+end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     local group = self.view
-    local totalScore = 0;
 
-    local score = display.newText("Highest Score: "..totalScore, 0, 0, native.systemFont, 16);
+    local saveData = loadSave.loadTable("settings.txt");
+    if (saveData ~= nil) then
+      settings.soundOn = saveData.soundOn;
+      settings.highScore = saveData.highScore;
+    end
+
+    local score = display.newText("Highest Score: "..settings.highScore, 0, 0, native.systemFont, 16);
     local play = image.setImage("play.png", 80*pixelRatio, 80*pixelRatio, _W/2, _H/2, display.CenterReferencePoint);
     local submit = image.setImage("submit.png", 50*pixelRatio, 50*pixelRatio, _W/2+100*pixelRatio, _H/2, display.CenterReferencePoint);
     sound = image.setImage("sound.png", 50*pixelRatio, 50*pixelRatio, _W/2-100*pixelRatio, _H/2, display.CenterReferencePoint);
     mute = image.setImage("mute.png", 50*pixelRatio, 50*pixelRatio, _W/2-100*pixelRatio, _H/2, display.CenterReferencePoint);
 
-    score:setReferencePoint(display.TopCenterReferencePoint);
-    score.x = _W/2;
+    local labelColor = {
+    default = { 100, 100, 100, 200 },
+    over = { 100, 100, 100, 200 },
+    }
+
+    local myButton = widget.newButton{
+        width = 200,
+        height = 40,
+        defaultFile = "images/button_released.png",
+        overFile = "images/button_pressed.png",
+        label = "More Games",
+        labelColor = labelColor,
+        onRelease = goToAdvertLink,
+    }
+
+    myButton.x = _W/2;
+    myButton.y = _H/2 + play.contentWidth;
+
+    score:setReferencePoint(display.TopLeftReferencePoint);
 
     soundCheck(true);
     play:addEventListener("tap", playGame);
@@ -73,6 +106,7 @@ function scene:enterScene( event )
     group:insert(sound);
     group:insert(mute);
     group:insert(submit);
+    group:insert(myButton);
 
 end
 

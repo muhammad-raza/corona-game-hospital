@@ -1,7 +1,8 @@
 module (..., package.seeall)
 local ragdoll = require ("ragdoll")
+local loadSave = require ("LoadSave")
 
-local jumpOne = "jumpOne"; local jumpTwo = "jumpTwo"; local jumpThree = "jumpThree";
+local jumpOne = "jumpOne"; local jumpTwo = "jumpTwo"; local jumpThree = "jumpThree"; local scoreCount = 0;
 
 local function getSpeed()
   return 3*pixelRatio;
@@ -82,12 +83,14 @@ local function dropRagdoll(event)
   event.headJoint:removeSelf()
 end
 
-local function revertScale ()
-  transition.to( ambulance, { time=300, xScale=1, yScale=1} )
-end
-
 local function awardAndDestroyRagdoll()
-  transition.to( ambulance, { time=300, xScale=2, yScale=2, onComplete=revertScale} )
+  scoreCount = scoreCount + 1;
+  scoreText.text = "You Saved: "..scoreCount;
+  if (scoreCount > settings.highScore) then
+    settings.highScore = scoreCount;
+    highScoreText.text = "High Score: "..scoreCount
+    loadSave.saveTable(settings, "settings.txt")
+  end
 end
 
 function jumpRagdoll(event)
