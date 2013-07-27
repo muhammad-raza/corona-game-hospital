@@ -2,10 +2,14 @@ module (..., package.seeall)
 local ragdoll = require ("ragdoll")
 local loadSave = require ("LoadSave")
 
-local jumpOne = "jumpOne"; local jumpTwo = "jumpTwo"; local jumpThree = "jumpThree"; local scoreCount = 0;
+local jumpOne = "jumpOne"; local jumpTwo = "jumpTwo"; local jumpThree = "jumpThree"; local scoreCount = 0; local failCount = 0;
 
 local function getSpeed()
-  return 3*pixelRatio;
+  if (pixelRatio < 2) then return 2; else return 4; end
+end
+
+local function getSpeedMultiplier()
+  if (pixelRatio < 2) then return 1.4; else return 2; end
 end
 
 local function setVertex(ragdoll, x, y)
@@ -13,37 +17,41 @@ local function setVertex(ragdoll, x, y)
   ragdoll.vertex.x = x;
   ragdoll.vertex.y = y;
 
-  local xPos = ragdoll.x - getSpeed();
+  local xPos = ragdoll.x - getSpeed()*getSpeedMultiplier();
   local square = (xPos - x)*(xPos - x)
   ragdoll.vertex.a = ((ragdoll.y-y)/square);
-  print(ragdoll.vertex.a)
 end
 
 function onBedCollision(self, event)
   local ragdollLocal = event.other.parent
-  local ragdollHead = ragdollLocal[1];
-  if (ragdollHead.count == 1) then
-    if (ragdollHead.action == jumpTwo) then
-      setVertex(ragdollHead, pointThree+15*pixelRatio, percent*3);
-      ragdollHead.action = jumpThree;
-    elseif (ragdollHead.action == jumpOne) then
-      setVertex(ragdollHead, pointTwo, percent*3);
-      ragdollHead.action = jumpTwo;
-    elseif (ragdollHead.action == "drop") then
-      setVertex(ragdollHead, pointOne, percent*3);
-      ragdollHead.action = jumpOne;
+  local ragdollTorzo = ragdollLocal[3];
+
+  if (ragdollTorzo.action ~= "immobalize") then
+    if (ragdollTorzo.count == 1) then
+      if (ragdollTorzo.action == jumpTwo) then
+        setVertex(ragdollTorzo, pointThree, percent*3);
+        ragdollTorzo.action = jumpThree;
+      elseif (ragdollTorzo.action == jumpOne) then
+        setVertex(ragdollTorzo, pointTwo, percent*3);
+        ragdollTorzo.action = jumpTwo;
+      elseif (ragdollTorzo.action == "drop") then
+        setVertex(ragdollTorzo, pointOne, percent*3);
+        ragdollTorzo.action = jumpOne;
+      end
+      print(ragdollTorzo.action)
+    ragdollTorzo.count = 2;
     end
-    print(ragdollHead.action)
-  ragdollHead.count = 2;
+    if (event.phase == "ended") then
+    timer.performWithDelay(1000, function() ragdollTorzo.count = 1; end, 1)
+    end
   end
-  if (event.phase == "ended") then
-    timer.performWithDelay(1000, function() ragdollHead.count = 1; end, 1)
-  end
+
+
 end
 
 function onWallBottomSensorCollision(self, event)
   local ragdollLocal = event.other.parent
-  ragdollLocal[1].action = "immobalize";
+  ragdollLocal[3].action = "immobalize";
 end
 
 local function removeObject(obj)
@@ -52,10 +60,27 @@ local function removeObject(obj)
   obj = nil;
 end
 
+local function awardAndDestroyRagdoll(event)
+  scoreCount = scoreCount + 1;
+  scoreText.text = "You Saved: "..scoreCount;
+  if (scoreCount > settings.highScore) then
+    settings.highScore = scoreCount;
+    highScoreText.text = "High Score: "..scoreCount
+    loadSave.saveTable(settings, "settings.txt")
+  end
+end
+
 function onAmbulanceWallCollision(self, event)
+  transition.to( ambulance, { time=100, xScale=0.9*pixelRatio, yScale=0.9*pixelRatio } )
+  transition.to( scoreText, { time=100, xScale=1.5, yScale=1.5 } )
+
+  transition.to( ambulance, { time=100, delay=100, xScale=0.7*pixelRatio, yScale=0.7*pixelRatio } )
+  transition.to( scoreText, { time=100, delay=100, xScale=1, yScale=1 } )
+
   local ragdollLocal = event.other.parent;
-  ragdollLocal[1].action = "awardAndDestroy";
---  removeObject(ragdollLocal);
+  ragdollLocal[3].action = "awardAndDestroy";
+  awardAndDestroyRagdoll(event);
+  removeObject(ragdollLocal);
 end
 
 local function getParabolicCoordinates(event, jumpPos)
@@ -71,30 +96,31 @@ local function getParabolicCoordinates(event, jumpPos)
 end
 
 local function jump(event, jumpPos)
-  event.headJoint = physics.newJoint("touch", event, event.x, event.y);
+  event.torzoJoint = physics.newJoint("touch", event, event.x, event.y);
+  event.torzoJoint.maxForce = 1000000
   local coords = getParabolicCoordinates(event, jumpPos);
-  event.headJoint:setTarget(coords.x, coords.y)
-  event.headJoint:removeSelf()
+  event.torzoJoint:setTarget(coords.x, coords.y)
+  event.torzoJoint:removeSelf()
 end
 
 local function dropRagdoll(event)
-  event.headJoint = physics.newJoint("touch", event, event.x, event.y);
-  event.headJoint:setTarget(event.x, event.y+8*pixelRatio)
-  event.headJoint:removeSelf()
+  event.torzoJoint = physics.newJoint("touch", event, event.x, event.y);
+  event.torzoJoint:setTarget(event.x, event.y+8*pixelRatio)
+  event.torzoJoint:removeSelf()
 end
 
-local function awardAndDestroyRagdoll()
-  scoreCount = scoreCount + 1;
-  scoreText.text = "You Saved: "..scoreCount;
-  if (scoreCount > settings.highScore) then
-    settings.highScore = scoreCount;
-    highScoreText.text = "High Score: "..scoreCount
-    loadSave.saveTable(settings, "settings.txt")
+local function stitchRagdoll(event)
+  event:applyForce( 0, 5, event.x, event.y );
+  if (event.count == 1) then
+    Runtime:removeEventListener("collision", event)
+    failCount = failCount + 1;
+    print(failCount);
+    event.count = 2;
   end
+
 end
 
 function jumpRagdoll(event)
---  print(event.action)
 
   if (event.action == "drop") then
     dropRagdoll(event)
@@ -104,7 +130,7 @@ function jumpRagdoll(event)
       jump(event, event.action);
   end
 
-  if (event.action == "awardAndDestroy") then
-    awardAndDestroyRagdoll();
+  if (event.action == "immobalize") then
+    stitchRagdoll(event);
   end
 end

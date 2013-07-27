@@ -31,14 +31,16 @@ function scene:createScene( event )
 
     local background = image.setImage("background.png", _W, _H, 0, 0, display.TopLeftReferencePoint)
 
-    scoreText = display.newText("You Saved: 0", 0, 0,152*pixelRatio, 28*pixelRatio, native.systemFont, 16);
-    scoreText:setReferencePoint(display.TopLeftReferencePoint);
-    scoreText:setTextColor(100,100,100,200)
 
-    highScoreText = display.newText("High Score: "..settings.highScore, 0, 0, 152*pixelRatio,28*pixelRatio, native.systemFont, 16);
+
+    highScoreText = display.newText("High Score: "..settings.highScore, 0, 0,200, 32, native.systemFont, 16);
     highScoreText:setReferencePoint(display.TopLeftReferencePoint);
-    highScoreText.y = scoreText.contentHeight;
     highScoreText:setTextColor(100,100,100,200)
+
+    scoreText = display.newText("You Saved: 0", 0, 0,200, 32, native.systemFont, 16);
+    scoreText:setReferencePoint(display.TopLeftReferencePoint);
+    scoreText.y = highScoreText.contentHeight;
+    scoreText:setTextColor(0,0,0,200)
 
     buildingObj   = image.setImage("building_new.png", 70*pixelRatio, 220*pixelRatio, _W, _H-percent, display.BottomRightReferencePoint)
     local buildingFire = image.addSprite("fire_new.png", 200, 200, buildingObj.x-buildingObj.contentWidth/2, buildingObj.y-(buildingObj.contentHeight*35/100), display.CenterReferencePoint, 12, 1500, 0)
@@ -79,15 +81,16 @@ function scene:enterScene( event )
 
     local function generateRagdoll()
       local color1 = {math.random(120), math.random(120), math.random(120), 255 }
-      local ragdollObj = ragdoll.newRagDoll(25, 50, color1)
-      ragdollObj[1].enterFrame = collision.jumpRagdoll
-      Runtime:addEventListener("enterFrame", ragdollObj[1]);
-      ragdollObj[1].action = "drop"
-      ragdollObj[1].count = 1;
+      local ragdollObj = ragdoll.newRagDoll(pointRight, 50, color1)
+      local activeBodyPart = ragdollObj[3];
+      activeBodyPart.enterFrame = collision.jumpRagdoll
+      Runtime:addEventListener("enterFrame", activeBodyPart);
+      activeBodyPart.action = "drop"
+      activeBodyPart.count = 1;
       group:insert(ragdollObj);
     end
 
-    timer.performWithDelay( 1000, generateRagdoll , 1 )
+    timer.performWithDelay( 2000, generateRagdoll , 3 )
 
     timer.performWithDelay( delay, building.fireBuilding , 2 )
 

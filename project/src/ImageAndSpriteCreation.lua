@@ -34,7 +34,7 @@ function createWalls()
 
   local wallBottom         = display.newRect( 0, _H-(percent/2), _W, percent/2 )
 
-  local wallBottomSensor   = display.newRect( 0, _H-(percent/2)-(hospitalBed.contentHeight*3)/4, _W, 1*pixelRatio )
+  local wallBottomSensor   = display.newRect( 0, _H-(percent/2)-(hospitalBed.contentHeight*1)/2, _W, 1*pixelRatio )
   local wallAmbulance      = display.newRect( 0, _H-(percent/2)-ambulance.contentHeight, pointLeft/2, 1*pixelRatio )
   local collisionFilter = { categoryBits = 1, maskBits = 2 };
 
