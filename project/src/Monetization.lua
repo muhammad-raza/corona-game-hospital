@@ -1,6 +1,7 @@
 local RevMob = require("revmob");
 RevMob.setTestingMode(RevMob.TEST_WITH_ADS)
 local AMAZON_APK = false;
+local _W = display.contentWidth; local pixelRatio = _W/480;
 
 local REVMOB_IDS = {
       [REVMOB_ID_IOS] = '51e276c2f503ed575200013f',
@@ -29,8 +30,8 @@ end
 
 monetize.showBannerAtTop = function()
   local banner = RevMob.createBanner();
-  banner.width = 300;
-  banner.height = 40;
+  banner.width = 250*pixelRatio;
+  banner.height = 35*pixelRatio;
   banner.x = _W-(banner.width/2);
   banner.y = banner.height/2;
 end

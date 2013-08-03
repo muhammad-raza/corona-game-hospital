@@ -16,10 +16,22 @@ local function setFill(ob, param)
 	ob:setFillColor(param[1], param[2], param[3], param[4] or 255)
 end
 
+local function getRagdollSize()
+  if (pixelRatio >=1 and pixelRatio <2) then
+    return 1;
+  elseif (pixelRatio >=2 and pixelRatio <3) then
+    return 1.5;
+  else
+    return 2;
+  end
+end
+
 ragdoll.newRagDoll = function(originX, originY, colorTable) 
        
 	--> Create Ragdoll Group
-	 
+
+    local pixelRatio = getRagdollSize();
+
 	local spacing = 1
 
 	local ragdoll = display.newGroup ()
@@ -151,38 +163,39 @@ local collisionFilter = { categoryBits = 2, maskBits = 1 };
 
 	-- Head to shoulders
 
-    addFrictionJoint( torsoA, head, head.x, head.y+(2*pixelRatio), 1, 1 )
+    addFrictionJoint( torsoA, head, head.x, head.y+(2*pixelRatio), -40, 40 )
 
 	-- Upper arm to shoulders
 	-- L
-	addFrictionJoint( torsoA, upperArmL, torsoA.x-2, torsoA.y-2, -1, 1 )
+	addFrictionJoint( torsoA, upperArmL, torsoA.x-2, torsoA.y-2,  -85, 130 )
 
 	-- R
-	addFrictionJoint( torsoA, upperArmR, torsoA.x+2, torsoA.y-2, -1, 1 )
+	addFrictionJoint( torsoA, upperArmR, torsoA.x+2, torsoA.y-2, -130, 85)
 
 	-- Lower arm to upper arm
 	-- L
-	addFrictionJoint( upperArmL, lowerArmL, upperArmL.x-(upperArmL.contentWidth/2), upperArmL.y, -1,1 )
+	addFrictionJoint( upperArmL, lowerArmL, upperArmL.x-(upperArmL.contentWidth/2), upperArmL.y, -130, 10 )
 
 	-- R
-	addFrictionJoint( upperArmR, lowerArmR, upperArmR.x+(upperArmR.contentWidth/2), upperArmR.y, -1, 1 )
+	addFrictionJoint( upperArmR, lowerArmR, upperArmR.x+(upperArmR.contentWidth/2), upperArmR.y, -10, 130 )
 
 	-- Shoulders/stomach
-	local j = addFrictionJoint( torsoA, torsoB, torsoA.x, torsoA.y, 1,1 )
+
+	local j = addFrictionJoint( torsoA, torsoB, torsoA.x, torsoA.y, -15, 15 )
 
 	-- Stomach/hips
-	addFrictionJoint( torsoB, torsoC, torsoB.x, torsoB.y, 1,1 )
+	addFrictionJoint( torsoB, torsoC, torsoB.x, torsoB.y, -15, 15 )
 
 	-- L
-	addFrictionJoint( torsoC, upperLegL, torsoC.x-2, torsoC.y+5, 1,1 )
+	addFrictionJoint( torsoC, upperLegL, torsoC.x-2, torsoC.y+5, -25, 45 )
 
 	-- R
-	addFrictionJoint( torsoC, upperLegR, torsoC.x+2, torsoC.y+5, 1,1 )
+	addFrictionJoint( torsoC, upperLegR, torsoC.x+2, torsoC.y+5, -45, 25 )
 	-- L
-	addFrictionJoint( upperLegL, lowerLegL, upperLegL.x, upperLegL.y+(upperLegL.contentWidth/2+3), 1,1 )
+	addFrictionJoint( upperLegL, lowerLegL, upperLegL.x, upperLegL.y+(upperLegL.contentWidth/2+3), -25, 115)
 
 	-- R
-	addFrictionJoint( upperLegR, lowerLegR, upperLegR.x, upperLegR.y+(upperLegR.contentWidth/2+3), 1,1 )
+	addFrictionJoint( upperLegR, lowerLegR, upperLegR.x, upperLegR.y+(upperLegR.contentWidth/2+3), -115, 25 )
 
 	return ragdoll
 end

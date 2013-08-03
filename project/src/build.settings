@@ -13,6 +13,11 @@ settings =
 	{
 		plist =
 		{
+		    UIAppFonts =
+            {
+                        "TequillaSunrise.ttf"
+            },
+
 			CoronaUseIOS6LandscapeOnlyWorkaround = true,
 		},
 	},

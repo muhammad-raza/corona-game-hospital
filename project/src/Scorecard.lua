@@ -4,130 +4,84 @@ local storyboard = require( "storyboard" )
 local image = require("ImageAndSpriteCreation")
 local widget = require("widget")
 local loadSave = require("LoadSave")
-local monetize = require("Monetization")
 
 
 local scene = storyboard.newScene()
 
 local display = display; local _W = display.contentWidth; local _H = display.contentHeight; local pixelRatio = _W/480;
-local percent = (_H/100)*9;
-
-local function soundCheck(event)
-  if (event == true) then
-    settings.soundOn = not settings.soundOn;
-  end
-  if (settings.soundOn == true) then
-    settings.soundOn = false;
-    sound.isVisible = false;
-    mute.isVisible = true;
-  elseif (settings.soundOn == false) then
-    settings.soundOn = true;
-    sound.isVisible = true;
-    mute.isVisible = false;
-  end
-
-  loadSave.saveTable(settings, "settings.txt");
-end
-
-local function goToAdvertLink()
-  monetize.openAdLink();
-end
+local percent = (_H/100)*9; local highScore = 0; local recentScore = 0; local totalScore = 0; local averageScore= 0;
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
     local group = self.view
---    local saveData = loadSave.saveTable(settings, "settings.txt");
-    local background = image.setImage("background.png", _W, _H, 0, 0, display.TopLeftReferencePoint);
-    background:setFillColor(110, 110, 110, 100)
+
+--    display.setDefault( "background", 255, 255, 255 );
+    local background = image.setImage("scorecard.jpg", _W, _H, 0, 0, display.TopLeftReferencePoint);
 
     local saveData = loadSave.loadTable("settings.txt");
     if (saveData ~= nil) then
-      settings.soundOn = saveData.soundOn;
-      settings.highScore = saveData.highScore;
-      settings.averageScore = saveData.averageScore;
-      settings.recentScore = saveData.recentScore;
-      settings.totalScore = saveData.totalScore;
+      highScore = saveData.highScore;
+      averageScore = saveData.averageScore;
+      recentScore = saveData.recentScore;
+      totalScore = saveData.totalScore;
     end
 
-    local score = display.newText("Hi Score: "..settings.highScore, 0, 0, "TequillaSunrise", 12+(pixelRatio*2));
-    play = image.setImage("play.png", 80*pixelRatio, 80*pixelRatio, _W/2, _H/2, display.CenterReferencePoint);
-    scorecard = image.setImage("submit.png", 50*pixelRatio, 50*pixelRatio, _W/2+100*pixelRatio, _H/2, display.CenterReferencePoint);
-    sound = image.setImage("sound.png", 50*pixelRatio, 50*pixelRatio, _W/2-100*pixelRatio, _H/2, display.CenterReferencePoint);
-    mute = image.setImage("mute.png", 50*pixelRatio, 50*pixelRatio, _W/2-100*pixelRatio, _H/2, display.CenterReferencePoint);
+    local ambulance  = image.addSprite("ambulance.png", 102, 80, _W/1.2, _H-(percent*3.2), display.CenterReferencePoint, 2, 1000, 0)
+    ambulance.xScale = 0.5*pixelRatio;
+    ambulance.yScale = 0.5*pixelRatio;
 
-    local labelColor = {
-    default = { 100, 100, 100, 200 },
-    over = { 100, 100, 100, 200 },
-    }
+    local highScore = display.newText("High Score:               "..highScore, _W/3, percent, "TequillaSunrise", 12+(pixelRatio*2));
+    highScore:setTextColor(0,0,0,200);
+    highScore.xScale = 4*pixelRatio;
+    highScore.yScale = 4*pixelRatio;
 
-    local myButton = widget.newButton{
-        width = 200*pixelRatio,
-        height = 40*pixelRatio,
-        defaultFile = "images/button_released.png",
-        overFile = "images/button_pressed.png",
-        label = "More Games",
-        labelColor = labelColor,
-        onRelease = goToAdvertLink,
-    }
+    local averageScore = display.newText("Average Score:       "..averageScore, _W/3, percent*2.5, "TequillaSunrise", 12+(pixelRatio*2));
+    averageScore:setTextColor(0,0,0,200);
+    averageScore.xScale = 4*pixelRatio;
+    averageScore.yScale = 4*pixelRatio;
+    averageScore.alpha = 0;
 
-    myButton.x = _W/2;
-    myButton.y = _H/2 + play.contentWidth;
+    local recentScore = display.newText("Recent Score:          "..recentScore, _W/3, percent*4, "TequillaSunrise", 12+(pixelRatio*2));
+    recentScore:setTextColor(0,0,0,200);
+    recentScore.xScale = 4*pixelRatio;
+    recentScore.yScale = 4*pixelRatio;
+    recentScore.alpha = 0;
 
-    score:setReferencePoint(display.TopLeftReferencePoint);
+    local totalScore = display.newText("Total Score:              "..totalScore, _W/3, percent*5.5, "TequillaSunrise", 12+(pixelRatio*2));
+    totalScore:setTextColor(0,0,0,200);
+    totalScore.xScale = 4*pixelRatio;
+    totalScore.yScale = 4*pixelRatio;
+    totalScore.alpha = 0;
 
-    soundCheck(true);
+    local back = display.newText("Back", _W/2, _H-(percent*1.5), "TequillaSunrise", 14+(pixelRatio*2));
+    back:setTextColor(0,0,0,200);
 
-    group:insert(background);
-    group:insert(score);
-    group:insert(play);
-    group:insert(scorecard);
-    group:insert(sound);
-    group:insert(mute);
-    group:insert(myButton);
+    timer.performWithDelay(250, function() averageScore.alpha = 1; end);
 
-end
+    timer.performWithDelay(550, function() recentScore.alpha = 1; end);
 
-local function playGame()
-  local options =
-    {
-        effect = "fade",
-        time = 400,
-    }
-    storyboard:gotoScene("game", options);
-end
+    timer.performWithDelay(850, function() totalScore.alpha = 1; end);
 
-local function removeObject(obj)
-  obj:removeSelf();
-  obj = nil;
-end
 
-local function showScorecard()
-  storyboard:gotoScene("Scorecard");
+    transition.to( highScore, { time=200, xScale=1, yScale=1 } )
+
+    transition.to( averageScore, { time=200, delay=300, xScale=1, yScale=1 } )
+
+    transition.to( recentScore, { time=200, delay=600, xScale=1, yScale=1 } )
+
+    transition.to( totalScore, { time=200, delay=900, xScale=1, yScale=1 } )
+
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     local group = self.view
 
-    storyboard.purgeAll();
-    monetize.createAdLink();
-    monetize.createFullScreenAd();
-    monetize.startFullPageAdvert();
-    monetize.showBannerAtTop();
-
-    play:addEventListener("tap", playGame);
-    sound:addEventListener("tap", soundCheck);
-    mute:addEventListener("tap", soundCheck);
-    scorecard:addEventListener("tap", showScorecard);
-
 end
 
 
 local function removeEventListeners()
-  play:removeEventListener("tap", playGame);
-  sound:removeEventListener("tap", soundCheck);
-  mute:removeEventListener("tap", soundCheck);
-  scorecard:removeEventListener("tap", showScorecard);
+
 end
 
 -- Called when scene is about to move offscreen:
@@ -156,7 +110,11 @@ function scene:overlayBegan( event )
         local group = self.view
         local overlay_scene = event.sceneName  -- overlay scene name
 
-        -----------------------------------------------------------------------------
+  scoreText = display.newText("aasdf", 0, 0,240, 28+(pixelRatio*4), "TequillaSunrise", 16+pixelRatio);
+    scoreText:setReferencePoint(display.TopLeftReferencePoint);
+    scoreText:setTextColor(100,100,100,200)
+
+  -----------------------------------------------------------------------------
 
         --      This event requires build 2012.797 or later.
 

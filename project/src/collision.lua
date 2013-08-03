@@ -1,6 +1,7 @@
 module (..., package.seeall)
 local ragdoll = require ("ragdoll")
 local loadSave = require ("LoadSave")
+local storyboard = require( "storyboard" )
 
 local jumpOne = "jumpOne"; local jumpTwo = "jumpTwo"; local jumpThree = "jumpThree"; local scoreCount = 0; local failCount = 0;
 
@@ -29,7 +30,7 @@ function onBedCollision(self, event)
   if (ragdollTorzo.action ~= "immobalize") then
     if (ragdollTorzo.count == 1) then
       if (ragdollTorzo.action == jumpTwo) then
-        setVertex(ragdollTorzo, pointThree, percent*3);
+        setVertex(ragdollTorzo, pointThree+(15*getSpeedMultiplier()), percent*3);
         ragdollTorzo.action = jumpThree;
       elseif (ragdollTorzo.action == jumpOne) then
         setVertex(ragdollTorzo, pointTwo, percent*3);
@@ -38,7 +39,6 @@ function onBedCollision(self, event)
         setVertex(ragdollTorzo, pointOne, percent*3);
         ragdollTorzo.action = jumpOne;
       end
-      print(ragdollTorzo.action)
     ragdollTorzo.count = 2;
     end
     if (event.phase == "ended") then
@@ -63,11 +63,6 @@ end
 local function awardAndDestroyRagdoll(event)
   scoreCount = scoreCount + 1;
   scoreText.text = "You Saved: "..scoreCount;
-  if (scoreCount > settings.highScore) then
-    settings.highScore = scoreCount;
-    highScoreText.text = "High Score: "..scoreCount
-    loadSave.saveTable(settings, "settings.txt")
-  end
 end
 
 function onAmbulanceWallCollision(self, event)
@@ -110,18 +105,47 @@ local function dropRagdoll(event)
 end
 
 local function stitchRagdoll(event)
-  event:applyForce( 0, 5, event.x, event.y );
+  event:applyForce( 0, 5*pixelRatio, event.x, event.y );
   if (event.count == 1) then
+    print(failCount)
     Runtime:removeEventListener("collision", event)
     failCount = failCount + 1;
-    print(failCount);
     event.count = 2;
+    if (failCount == 3) then
+    local options =
+    {
+        effect = "fade",
+        time = 400,
+    }
+
+    local saveData = loadSave.loadTable("settings.txt");
+    if (saveData ~= nil) then
+      if (saveData.averageScore == 0) then
+        settings.averageScore = scoreCount;
+      else
+        settings.averageScore = (saveData.averageScore + scoreCount)/2;
+      end
+      settings.recentScore = scoreCount;
+      if(saveData.highScore < scoreCount) then
+        settings.highScore = scoreCount;
+      end
+      settings.totalScore = saveData.totalScore + scoreCount;
+    else
+      settings.averageScore = scoreCount;
+      settings.totalScore = scoreCount;
+    end
+    print ("average score: "..settings.averageScore);
+    loadSave.saveTable(settings, "settings.txt")
+
+    failCount = 0; scoreCount = 0;
+    storyboard.gotoScene("menu", options);
+  end
   end
 
 end
 
 function jumpRagdoll(event)
-
+  print(event.action)
   if (event.action == "drop") then
     dropRagdoll(event)
   end

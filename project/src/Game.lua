@@ -4,7 +4,6 @@ local storyboard = require( "storyboard" )
 local bed = require ("Bed")
 local collision = require ("collision")
 
-local building = require ("Building")
 local image = require("ImageAndSpriteCreation")
 local menu = require("Menu")
 local monetize = require("Monetization")
@@ -14,9 +13,9 @@ local scene = storyboard.newScene()
 --> Start Physics
 local ragdoll = require ("ragdoll")
 
-local display = display; _W = display.contentWidth;_H = display.contentHeight; pixelRatio = _W/480;
+local display = display; _W = display.contentWidth;_H = display.contentHeight; pixelRatio = _W/480; ragdollGroup = display.newGroup();
 percent = (_H/100)*9;pointLeft = _W*(27/100); pointCenter = _W*(60/100); pointRight = _W*(93/100);
-pointOne = (pointRight+pointCenter)/2; pointTwo = (pointLeft+pointCenter)/2; pointThree = (pointLeft)/2;
+pointOne = (pointRight+pointCenter)/2; pointTwo = (pointLeft+pointCenter)/2; pointThree = (pointLeft)/2; local countForBlast = 40; local countForFire = 70;
 
 local function addFrictionJoint(a, b, posX, posY, lowerAngle, upperAngle, mT)
     local j = physics.newJoint ( "pivot", a, b, posX, posY)
@@ -31,18 +30,16 @@ function scene:createScene( event )
 
     local background = image.setImage("background.png", _W, _H, 0, 0, display.TopLeftReferencePoint)
 
-
-
-    highScoreText = display.newText("High Score: "..settings.highScore, 0, 0,200, 32, native.systemFont, 16);
+    highScoreText = display.newText("Hi Score: "..settings.highScore, 0, 0,240, 32+(pixelRatio*4), "TequillaSunrise", 12+(pixelRatio*2));
     highScoreText:setReferencePoint(display.TopLeftReferencePoint);
     highScoreText:setTextColor(100,100,100,200)
 
-    scoreText = display.newText("You Saved: 0", 0, 0,200, 32, native.systemFont, 16);
+    scoreText = display.newText("You Saved: 0", 0, 0,240, 28+(pixelRatio*4), "TequillaSunrise", 12+(pixelRatio*2));
     scoreText:setReferencePoint(display.TopLeftReferencePoint);
     scoreText.y = highScoreText.contentHeight;
-    scoreText:setTextColor(0,0,0,200)
+    scoreText:setTextColor(100,100,100,200)
 
-    buildingObj   = image.setImage("building_new.png", 70*pixelRatio, 220*pixelRatio, _W, _H-percent, display.BottomRightReferencePoint)
+    buildingObj   = image.setImage("building_new.png", 70*pixelRatio, _H-(percent*2), _W, _H-percent, display.BottomRightReferencePoint)
     local buildingFire = image.addSprite("fire_new.png", 200, 200, buildingObj.x-buildingObj.contentWidth/2, buildingObj.y-(buildingObj.contentHeight*35/100), display.CenterReferencePoint, 12, 1500, 0)
     buildingFire.xScale = 0.5*pixelRatio
     buildingFire.yScale = 0.5*pixelRatio
@@ -55,7 +52,8 @@ function scene:createScene( event )
     hospitalBed = image.setImage("bed_still.png", 53*pixelRatio, 35*pixelRatio, pointRight, _H-(percent), display.CenterReferencePoint)
 
     walls = image.createWalls();
-
+    wallBottomSensor = walls[2];
+    wallAmbulance = walls[3];
 
     monetize.createFullScreenAd();
 
@@ -67,13 +65,14 @@ function scene:createScene( event )
     group:insert(scoreText);
     group:insert(highScoreText);
     group:insert(walls);
+    group:insert(wallBottomSensor);
+    group:insert(wallAmbulance);
 
 end
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     local group = self.view
-
     Runtime:addEventListener("touch", bed.controlBedWithTouch);
     hospitalBed.enterFrame = bed.moveHospitalBed;
     Runtime:addEventListener("enterFrame", hospitalBed);
@@ -81,64 +80,99 @@ function scene:enterScene( event )
 
     local function generateRagdoll()
       local color1 = {math.random(120), math.random(120), math.random(120), 255 }
-      local ragdollObj = ragdoll.newRagDoll(pointRight, 50, color1)
+      local ragdollObj = ragdoll.newRagDoll(pointRight, percent, color1)
       local activeBodyPart = ragdollObj[3];
       activeBodyPart.enterFrame = collision.jumpRagdoll
       Runtime:addEventListener("enterFrame", activeBodyPart);
       activeBodyPart.action = "drop"
       activeBodyPart.count = 1;
+      ragdollObj.isRagdoll = true;
       group:insert(ragdollObj);
     end
 
-    timer.performWithDelay( 2000, generateRagdoll , 3 )
+    local function fireUpBuilding()
+      buildingFire = image.addSprite("fire_new.png", 200, 200, buildingObj.x-buildingObj.contentWidth/2, buildingObj.y-(buildingObj.contentHeight*countForFire/100), display.CenterReferencePoint, 12, 1500, 0)
+      buildingFire.xScale = 0.5*pixelRatio
+      buildingFire.yScale = 0.5*pixelRatio
+      countForFire = countForFire + 35;
+      group:insert(buildingFire);
+    end
 
-    timer.performWithDelay( delay, building.fireBuilding , 2 )
+    local function removeObj()
+      blastObj:removeSelf();
+      blastObj = nil;
+    end
+
+    local function blast()
+      fireUpBuilding()
+      blastObj  = image.addSprite("blast.png", 128, 128, buildingFire.x, buildingFire.y+(20*pixelRatio), display.CenterReferencePoint, 32, 2000, 1)
+      blastObj.xScale = pixelRatio;
+      blastObj.yScale = pixelRatio;
+      group:insert(blastObj);
+      removeObjTimer = timer.performWithDelay( 2500, removeObj, 1 )
+    end
+
+    local function fireBuilding(event)
+        blast();
+        countForBlast = countForBlast + 35;
+    end
+
+
+    ragdollTimer = timer.performWithDelay( 5000, generateRagdoll , 20)
+
+    fireTimer = timer.performWithDelay( delay, fireBuilding , 2 )
 
     hospitalBed.collision = collision.onBedCollision;
     hospitalBed:addEventListener( "collision", hospitalBed )
 
-    local wallBottomSensor = walls[2];
+
     wallBottomSensor.collision = collision.onWallBottomSensorCollision;
     wallBottomSensor:addEventListener( "collision", wallBottomSensor )
 
-    local wallAmbulance = walls[3];
     wallAmbulance.collision = collision.onAmbulanceWallCollision;
     wallAmbulance:addEventListener( "collision", wallAmbulance )
 
-    group:insert(wallBottomSensor);
-    group:insert(wallAmbulance);
+
 end
 
 
-local function removeListeners()
+local function removeListeners(group)
+  Runtime:removeEventListener("touch", bed.controlBedWithTouch);
+  Runtime:removeEventListener("enterFrame", hospitalBed);
   hospitalBed:removeEventListener( "collision", hospitalBed )
-
-    local wallBottomSensor = walls[2];
-    wallBottomSensor:removeEventListener( "collision", wallBottomSensor )
-
-    local wallAmbulance = walls[3];
-    wallAmbulance:removeEventListener( "collision", wallAmbulance )
+  wallBottomSensor:removeEventListener( "collision", wallBottomSensor )
+  wallAmbulance:removeEventListener( "collision", wallAmbulance )
+  timer.cancel(removeObjTimer);
+  timer.cancel(ragdollTimer);
+  timer.cancel(fireTimer);
+  for i=1,group.numChildren do
+    local tempRagdoll = group[i];
+    if (tempRagdoll.isRagdoll) then
+      Runtime:removeEventListener("enterFrame", tempRagdoll[3]);
+    end
+  end
+ countForBlast = 40; countForFire = 70;
 end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
     local group = self.view
 
-    removeListeners();
+    removeListeners(group);
 end
 
 -- Called AFTER scene has finished moving offscreen:
 function scene:didExitScene( event )
     local group = self.view
 
---    removeListeners();
+    removeListeners(group);
 end
 
 
 -- Called prior to the removal of scene's "view" (display group)
 function scene:destroyScene( event )
     local group = self.view
-    removeListeners()
+    removeListeners(group)
 end
 
 -- Called if/when overlay scene is displayed via storyboard.showOverlay()
